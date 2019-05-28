@@ -14,5 +14,10 @@ namespace TabuleiroNS
             Tabuleiro = tabuleiro;
             Cor = cor;
         }
+
+        public void IncrementarQuantidadeDeMovimentos()
+        {
+            QuantidadeDeMovimentos++;
+        }
     }
 }

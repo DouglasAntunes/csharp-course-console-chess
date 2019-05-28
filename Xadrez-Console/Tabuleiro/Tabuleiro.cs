@@ -41,6 +41,18 @@ namespace TabuleiroNS
             peca.Posicao = pos;
         }
 
+        public Peca RetirarPeca(Posicao pos)
+        {
+            if(Peca(pos) == null)
+            {
+                return null;
+            }
+            Peca pecaSendoRetirada = Peca(pos);
+            pecaSendoRetirada.Posicao = null;
+            Pecas[pos.Linha, pos.Coluna] = null;
+            return pecaSendoRetirada;
+        }
+
         public bool PosicaoValida(Posicao pos)
         {
             return !(pos.Linha < 0 || pos.Linha >= Linhas || pos.Coluna < 0 || pos.Coluna >= Colunas);
