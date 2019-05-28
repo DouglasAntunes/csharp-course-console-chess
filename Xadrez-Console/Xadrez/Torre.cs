@@ -1,4 +1,5 @@
 ﻿using TabuleiroNS;
+using TabuleiroNS.Enums;
 
 namespace Xadrez
 {

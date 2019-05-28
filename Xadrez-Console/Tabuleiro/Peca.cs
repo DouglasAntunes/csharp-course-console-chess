@@ -1,4 +1,6 @@
-﻿namespace TabuleiroNS
+﻿using TabuleiroNS.Enums;
+
+namespace TabuleiroNS
 {
     class Peca
     {
