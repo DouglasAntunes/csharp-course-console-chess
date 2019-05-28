@@ -18,6 +18,11 @@ namespace Xadrez_Console
                 tabuleiro.ColocarPeca(new Rei(tabuleiro, Cor.Preta), new Posicao(0, 2));
 
                 Tela.ImprimirTabuleiro(tabuleiro);
+
+                Console.WriteLine();
+                PosicaoXadrez pos = new PosicaoXadrez('a', 1);
+                Console.WriteLine(pos);
+                Console.WriteLine(pos.ToPosicao());
             }
             catch (Exception e)
             {
