@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TabuleiroNS
+﻿namespace TabuleiroNS
 {
     class Tabuleiro
     {
@@ -17,9 +13,15 @@ namespace TabuleiroNS
             Pecas = new Peca[Linhas, Colunas];
         }
 
-        public Peca peca(int linha, int coluna)
+        public Peca Peca(int linha, int coluna)
         {
             return Pecas[linha, coluna];
+        }
+
+        public void ColocarPeca(Peca peca, Posicao pos)
+        {
+            Pecas[pos.Linha, pos.Coluna] = peca;
+            peca.Posicao = pos;
         }
     }
 }
