@@ -21,7 +21,7 @@ namespace Xadrez
 
             //Acima
             pos.DefinirValores(Posicao.Linha - 1, Posicao.Coluna);
-            if(Tabuleiro.PosicaoValida(pos) && PodeMover(pos))
+            if (Tabuleiro.PosicaoValida(pos) && PodeMover(pos))
                 matriz[pos.Linha, pos.Coluna] = true;
 
             //NE

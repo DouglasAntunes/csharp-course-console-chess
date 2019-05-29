@@ -18,9 +18,7 @@ namespace Xadrez_Console
                     try
                     {
                         Console.Clear();
-                        Tela.ImprimirTabuleiro(partida.Tabuleiro);
-                        Console.WriteLine($"\nTurno: {partida.Turno}");
-                        Console.WriteLine($"Aguardando Jogada: {partida.JogadorAtual}");
+                        Tela.ImprimirPartida(partida);
 
                         Console.Write("\nOrigem: ");
                         Posicao origem = Tela.LerPosicaoXadrez().ToPosicao();
@@ -44,14 +42,14 @@ namespace Xadrez_Console
                     }
                 }
 
-                
+
             }
             catch (TabuleiroException e)
             {
                 Console.WriteLine($"TabuleiroException: {e.Message}");
                 Console.WriteLine($"More Info: {e.StackTrace}");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine($"Unexpected Error: {e.Message}");
                 Console.WriteLine($"More Info: {e.StackTrace}");

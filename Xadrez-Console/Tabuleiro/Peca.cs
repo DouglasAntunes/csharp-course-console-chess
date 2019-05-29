@@ -27,7 +27,7 @@ namespace TabuleiroNS
             {
                 for (int j = 0; j < Tabuleiro.Colunas; j++)
                 {
-                    if(matrizDeMovimentos[i,j])
+                    if (matrizDeMovimentos[i, j])
                     {
                         return true;
                     }

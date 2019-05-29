@@ -33,7 +33,7 @@ namespace TabuleiroNS
 
         public void ColocarPeca(Peca peca, Posicao pos)
         {
-            if(ExistePeca(pos))
+            if (ExistePeca(pos))
             {
                 throw new TabuleiroException("Já existe uma peça nessa posição!");
             }
@@ -43,7 +43,7 @@ namespace TabuleiroNS
 
         public Peca RetirarPeca(Posicao pos)
         {
-            if(Peca(pos) == null)
+            if (Peca(pos) == null)
             {
                 return null;
             }
@@ -60,7 +60,7 @@ namespace TabuleiroNS
 
         public void ValidarPosicao(Posicao pos)
         {
-            if(!PosicaoValida(pos))
+            if (!PosicaoValida(pos))
             {
                 throw new TabuleiroException("Posição inválida");
             }
