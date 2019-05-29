@@ -38,24 +38,28 @@ namespace Xadrez_Console
                     catch (TabuleiroException e)
                     {
                         Console.WriteLine(e.Message);
-                        Console.WriteLine($"More Info: {e.StackTrace}");
+#if DEBUG
+                        Console.WriteLine($"More Info:\n{e.StackTrace}");
+#endif
                         Console.ReadLine();
                     }
                 }
                 Console.Clear();
                 Tela.ImprimirPartida(partida);
-
-
             }
             catch (TabuleiroException e)
             {
                 Console.WriteLine($"TabuleiroException: {e.Message}");
-                Console.WriteLine($"More Info: {e.StackTrace}");
+#if DEBUG
+                Console.WriteLine($"More Info:\n{e.StackTrace}");
+#endif
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Unexpected Error: {e.Message}");
-                Console.WriteLine($"More Info: {e.StackTrace}");
+#if DEBUG
+                Console.WriteLine($"More Info:\n{e.StackTrace}");
+#endif
             }
 
         }
