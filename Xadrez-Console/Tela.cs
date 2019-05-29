@@ -28,11 +28,20 @@ namespace Xadrez_Console
             ImprimirTabuleiro(partida.Tabuleiro);
             ImprimirPecasCapturadas(partida);
             Console.WriteLine($"\nTurno: {partida.Turno}");
-            Console.WriteLine($"Aguardando Jogada: {partida.JogadorAtual}");
-            if(partida.EmXeque)
+            if(!partida.Terminada)
             {
-                Console.WriteLine("XEQUE!");
+                Console.WriteLine($"Aguardando Jogada: {partida.JogadorAtual}");
+                if (partida.EmXeque)
+                {
+                    Console.WriteLine("XEQUE!");
+                }
             }
+            else
+            {
+                Console.WriteLine("XEQUEMATE!");
+                Console.WriteLine($"Vencedor: {partida.JogadorAtual}");
+            }
+            
         }
 
         public static void ImprimirPecasCapturadas(PartidaDeXadrez partida)
