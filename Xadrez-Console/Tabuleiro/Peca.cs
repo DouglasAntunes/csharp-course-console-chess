@@ -2,7 +2,7 @@
 
 namespace TabuleiroNS
 {
-    class Peca
+    abstract class Peca
     {
         public Posicao Posicao { get; set; } = null;
         public Cor Cor { get; protected set; }
@@ -19,5 +19,13 @@ namespace TabuleiroNS
         {
             QuantidadeDeMovimentos++;
         }
+
+        protected bool PodeMover(Posicao pos)
+        {
+            Peca peca = Tabuleiro.Peca(pos);
+            return peca == null || peca.Cor != Cor;
+        }
+
+        public abstract bool[,] MovimentosPossiveis();
     }
 }

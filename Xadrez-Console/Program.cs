@@ -18,11 +18,15 @@ namespace Xadrez_Console
                     Console.Clear();
                     Tela.ImprimirTabuleiro(partida.Tabuleiro);
 
-                    Console.WriteLine();
-                    Console.Write("Origem: ");
+                    Console.Write("\nOrigem: ");
                     Posicao origem = Tela.LerPosicaoXadrez().ToPosicao();
 
-                    Console.Write("Destino: ");
+                    bool[,] posicoesPossiveis = partida.Tabuleiro.Peca(origem).MovimentosPossiveis();
+
+                    Console.Clear();
+                    Tela.ImprimirTabuleiro(partida.Tabuleiro, posicoesPossiveis);
+
+                    Console.Write("\nDestino: ");
                     Posicao destino = Tela.LerPosicaoXadrez().ToPosicao();
 
                     partida.ExecutarMovimento(origem, destino);
@@ -33,6 +37,12 @@ namespace Xadrez_Console
             catch (TabuleiroException e)
             {
                 Console.WriteLine($"TabuleiroException: {e.Message}");
+                Console.WriteLine($"More Info: {e.StackTrace}");
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine($"Unexpected Error: {e.Message}");
+                Console.WriteLine($"More Info: {e.StackTrace}");
             }
 
         }
