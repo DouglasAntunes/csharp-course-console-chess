@@ -1,7 +1,7 @@
 ﻿using TabuleiroNS;
 using TabuleiroNS.Enums;
 
-namespace Xadrez
+namespace Xadrez.Pecas
 {
     class Torre : Peca
     {
@@ -16,14 +16,14 @@ namespace Xadrez
 
         public override bool[,] MovimentosPossiveis()
         {
-            bool[,] matriz = new bool[Tabuleiro.Linhas, Tabuleiro.Colunas];
+            bool[,] matrizDeMovimentos = new bool[Tabuleiro.Linhas, Tabuleiro.Colunas];
             Posicao pos = new Posicao(0, 0);
 
             //Acima
             pos.DefinirValores(Posicao.Linha - 1, Posicao.Coluna);
             while (Tabuleiro.PosicaoValida(pos) && PodeMover(pos))
             {
-                matriz[pos.Linha, pos.Coluna] = true;
+                matrizDeMovimentos[pos.Linha, pos.Coluna] = true;
                 if (Tabuleiro.ExistePeca(pos) && Tabuleiro.Peca(pos).Cor != Cor)
                 {
                     break;
@@ -35,7 +35,7 @@ namespace Xadrez
             pos.DefinirValores(Posicao.Linha + 1, Posicao.Coluna);
             while (Tabuleiro.PosicaoValida(pos) && PodeMover(pos))
             {
-                matriz[pos.Linha, pos.Coluna] = true;
+                matrizDeMovimentos[pos.Linha, pos.Coluna] = true;
                 if (Tabuleiro.ExistePeca(pos) && Tabuleiro.Peca(pos).Cor != Cor)
                 {
                     break;
@@ -47,7 +47,7 @@ namespace Xadrez
             pos.DefinirValores(Posicao.Linha, Posicao.Coluna + 1);
             while (Tabuleiro.PosicaoValida(pos) && PodeMover(pos))
             {
-                matriz[pos.Linha, pos.Coluna] = true;
+                matrizDeMovimentos[pos.Linha, pos.Coluna] = true;
                 if (Tabuleiro.ExistePeca(pos) && Tabuleiro.Peca(pos).Cor != Cor)
                 {
                     break;
@@ -55,11 +55,11 @@ namespace Xadrez
                 pos.Coluna++;
             }
 
-            //esquerda
+            //Esquerda
             pos.DefinirValores(Posicao.Linha, Posicao.Coluna - 1);
             while (Tabuleiro.PosicaoValida(pos) && PodeMover(pos))
             {
-                matriz[pos.Linha, pos.Coluna] = true;
+                matrizDeMovimentos[pos.Linha, pos.Coluna] = true;
                 if (Tabuleiro.ExistePeca(pos) && Tabuleiro.Peca(pos).Cor != Cor)
                 {
                     break;
@@ -67,7 +67,7 @@ namespace Xadrez
                 pos.Coluna--;
             }
 
-            return matriz;
+            return matrizDeMovimentos;
         }
     }
 }
