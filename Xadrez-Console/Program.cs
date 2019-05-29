@@ -38,6 +38,7 @@ namespace Xadrez_Console
                     catch (TabuleiroException e)
                     {
                         Console.WriteLine(e.Message);
+                        Console.WriteLine($"More Info: {e.StackTrace}");
                         Console.ReadLine();
                     }
                 }

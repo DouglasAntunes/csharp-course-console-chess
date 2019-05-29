@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TabuleiroNS;
 using TabuleiroNS.Enums;
 using TabuleiroNS.Exceptions;
@@ -11,7 +12,8 @@ namespace Xadrez
         public int Turno { get; private set; } = 1;
         public Cor JogadorAtual { get; private set; } = Cor.Branca;
         public bool Terminada { get; private set; } = false;
-        private HashSet<Peca> Pecas { get; set; } = new HashSet<Peca>();
+        public bool EmXeque { get; private set; } = false;
+        private HashSet<Peca> PecasEmJogo { get; set; } = new HashSet<Peca>();
         private HashSet<Peca> PecasCapturadas { get; set; } = new HashSet<Peca>();
 
         public PartidaDeXadrez()
@@ -23,7 +25,7 @@ namespace Xadrez
         public void ColocarNovaPeca(char coluna, int linha, Peca peca)
         {
             Tabuleiro.ColocarPeca(peca, new PosicaoXadrez(coluna, linha).ToPosicao());
-            Pecas.Add(peca);
+            PecasEmJogo.Add(peca);
         }
 
         private void ColocarPecas()
@@ -43,7 +45,7 @@ namespace Xadrez
             ColocarNovaPeca('d', 8, new Rei(Tabuleiro, Cor.Preta));
         }
 
-        public void ExecutarMovimento(Posicao origem, Posicao destino)
+        public Peca ExecutarMovimento(Posicao origem, Posicao destino)
         {
             Peca pecaDoTurnoAtual = Tabuleiro.RetirarPeca(origem);
             pecaDoTurnoAtual.IncrementarQuantidadeDeMovimentos();
@@ -53,13 +55,35 @@ namespace Xadrez
             {
                 PecasCapturadas.Add(pecaCapturada);
             }
+            return pecaCapturada;
         }
 
         public void RealizaJogada(Posicao origem, Posicao destino)
         {
-            ExecutarMovimento(origem, destino);
+            Peca pecaCapturada = ExecutarMovimento(origem, destino);
+
+            if(EstaEmXeque(JogadorAtual))
+            {
+                DesfazMovimento(origem, destino, pecaCapturada);
+                throw new TabuleiroException("Você não pode se colocar em xeque!");
+            }
+
+            EmXeque = EstaEmXeque(CorAdversariaACor(JogadorAtual));
+
             Turno++;
             MudaJogador();
+        }
+
+        private void DesfazMovimento(Posicao origem, Posicao destino, Peca pecaCapturada)
+        {
+            Peca p = Tabuleiro.RetirarPeca(destino);
+            p.DecrementarQuantidadeDeMovimentos();
+            if(pecaCapturada != null)
+            {
+                Tabuleiro.ColocarPeca(pecaCapturada, destino);
+                PecasCapturadas.Remove(pecaCapturada);
+            }
+            Tabuleiro.ColocarPeca(p, origem);
         }
 
         public void ValidarPosicaoDeOrigem(Posicao pos)
@@ -104,10 +128,10 @@ namespace Xadrez
             return aux;
         }
 
-        public HashSet<Peca> PecasEmJogo(Cor cor)
+        public HashSet<Peca> PecasEmJogoDaCor(Cor cor)
         {
             HashSet<Peca> aux = new HashSet<Peca>();
-            foreach (var x in PecasCapturadas)
+            foreach (var x in PecasEmJogo)
             {
                 if (x.Cor == cor)
                 {
@@ -116,6 +140,41 @@ namespace Xadrez
             }
             aux.ExceptWith(PecasCapturadasDaCor(cor));
             return aux;
+        }
+
+        private Cor CorAdversariaACor(Cor cor)
+        {
+            return cor == Cor.Branca ? Cor.Preta : Cor.Branca;
+        }
+
+        private Peca Rei(Cor cor)
+        {
+            foreach (var x in PecasEmJogoDaCor(cor))
+            {
+                if(x is Rei)
+                {
+                    return x;
+                }
+            }
+            return null;
+        }
+
+        public bool EstaEmXeque(Cor cor)
+        {
+            Peca rei = Rei(cor);
+            if(rei == null)
+            {
+                throw new TabuleiroException($"Não existe Rei da cor {cor} no tabuleiro!");
+            }
+            foreach (var x in PecasEmJogoDaCor(CorAdversariaACor(cor)))
+            {
+                bool[,] matrizDeMovimentos = x.MovimentosPossiveis();
+                if(matrizDeMovimentos[rei.Posicao.Linha, rei.Posicao.Coluna])
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

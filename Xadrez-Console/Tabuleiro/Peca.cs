@@ -20,6 +20,11 @@ namespace TabuleiroNS
             QuantidadeDeMovimentos++;
         }
 
+        public void DecrementarQuantidadeDeMovimentos()
+        {
+            QuantidadeDeMovimentos--;
+        }
+
         public bool ExisteMovimentosPossiveis()
         {
             bool[,] matrizDeMovimentos = MovimentosPossiveis();
