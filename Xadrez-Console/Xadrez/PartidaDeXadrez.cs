@@ -162,11 +162,26 @@ namespace Xadrez
         public void RealizaJogada(Posicao origem, Posicao destino)
         {
             Peca pecaCapturada = ExecutarMovimento(origem, destino);
+            Peca pecaMovida = Tabuleiro.Peca(destino);
 
             if (EstaEmXeque(JogadorAtual))
             {
                 DesfazMovimento(origem, destino, pecaCapturada);
                 throw new TabuleiroException("Você não pode se colocar em xeque!");
+            }
+
+            //#JogadaEspecial Promoção
+            if (pecaMovida is Peao)
+            {
+                if ((pecaMovida.Cor == Cor.Branca && destino.Linha == 0) || (pecaMovida.Cor == Cor.Preta && destino.Linha == 7))
+                {
+                    pecaMovida = Tabuleiro.RetirarPeca(destino);
+                    PecasEmJogo.Remove(pecaMovida);
+
+                    Peca dama = new Dama(Tabuleiro, pecaMovida.Cor);
+                    Tabuleiro.ColocarPeca(dama, destino);
+                    PecasEmJogo.Add(dama);
+                }
             }
 
             EmXeque = EstaEmXeque(CorAdversariaACor(JogadorAtual));
@@ -182,7 +197,6 @@ namespace Xadrez
             }
 
             //#JogadaEspecial En Passant
-            Peca pecaMovida = Tabuleiro.Peca(destino);
             bool isVuneravelEnPassant = pecaMovida is Peao && (destino.Linha == origem.Linha - 2 || destino.Linha == origem.Linha + 2);
             PecaVuneravelAEnPassant = isVuneravelEnPassant ? pecaMovida : null;
 
