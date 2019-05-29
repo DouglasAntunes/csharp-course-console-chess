@@ -20,10 +20,31 @@ namespace TabuleiroNS
             QuantidadeDeMovimentos++;
         }
 
+        public bool ExisteMovimentosPossiveis()
+        {
+            bool[,] matrizDeMovimentos = MovimentosPossiveis();
+            for (int i = 0; i < Tabuleiro.Linhas; i++)
+            {
+                for (int j = 0; j < Tabuleiro.Colunas; j++)
+                {
+                    if(matrizDeMovimentos[i,j])
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         protected bool PodeMover(Posicao pos)
         {
             Peca peca = Tabuleiro.Peca(pos);
             return peca == null || peca.Cor != Cor;
+        }
+
+        public bool PodeMoverPara(Posicao pos)
+        {
+            return MovimentosPossiveis()[pos.Linha, pos.Coluna];
         }
 
         public abstract bool[,] MovimentosPossiveis();

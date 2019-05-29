@@ -3,23 +3,20 @@ using System.Collections.Generic;
 using System.Text;
 using TabuleiroNS;
 using TabuleiroNS.Enums;
+using TabuleiroNS.Exceptions;
 
 namespace Xadrez
 {
     class PartidaDeXadrez
     {
         public Tabuleiro Tabuleiro { get; private set; }
-        private int Turno { get; set; }
-        private Cor JogadorAtual { get; set; }
-        public bool Terminada { get; private set; }
+        public int Turno { get; private set; } = 1;
+        public Cor JogadorAtual { get; private set; } = Cor.Branca;
+        public bool Terminada { get; private set; } = false;
 
         public PartidaDeXadrez()
         {
             Tabuleiro = new Tabuleiro(8, 8);
-            Turno = 1;
-            JogadorAtual = Cor.Branca;
-            Terminada = false;
-
             ColocarPecas();
         }
 
@@ -46,6 +43,42 @@ namespace Xadrez
             pecaDoTurnoAtual.IncrementarQuantidadeDeMovimentos();
             Peca pecaCapturada = Tabuleiro.RetirarPeca(destino);
             Tabuleiro.ColocarPeca(pecaDoTurnoAtual, destino);
+        }
+
+        public void RealizaJogada(Posicao origem, Posicao destino)
+        {
+            ExecutarMovimento(origem, destino);
+            Turno++;
+            MudaJogador();
+        }
+
+        public void ValidarPosicaoDeOrigem(Posicao pos)
+        {
+            if(!Tabuleiro.ExistePeca(pos))
+            {
+                throw new TabuleiroException("Não existe peça na posição de origem escolhida!");
+            }
+            if(JogadorAtual != Tabuleiro.Peca(pos).Cor)
+            {
+                throw new TabuleiroException("A peça de origem escolhida não é sua!");
+            }
+            if(!Tabuleiro.Peca(pos).ExisteMovimentosPossiveis())
+            {
+                throw new TabuleiroException("Não há movimentos possíveis para a peça de origem escolhida!");
+            }
+        }
+
+        public void ValidarPosicaoDeDestino(Posicao origem, Posicao destino)
+        {
+            if(!Tabuleiro.Peca(origem).PodeMoverPara(destino))
+            {
+                throw new TabuleiroException("Posição de destino inválida!");
+            }
+        }
+
+        private void MudaJogador()
+        {
+            JogadorAtual = (JogadorAtual == Cor.Branca ? Cor.Preta : Cor.Branca);
         }
     }
 }
