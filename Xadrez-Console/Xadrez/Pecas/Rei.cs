@@ -5,13 +5,23 @@ namespace Xadrez.Pecas
 {
     class Rei : Peca
     {
-        public Rei(Tabuleiro tabuleiro, Cor cor) : base(tabuleiro, cor)
+
+        private PartidaDeXadrez Partida { get; set; }
+
+        public Rei(Tabuleiro tabuleiro, Cor cor, PartidaDeXadrez partida) : base(tabuleiro, cor)
         {
+            Partida = partida;
         }
 
         public override string ToString()
         {
             return "R";
+        }
+
+        private bool TesteTorreParaRoque(Posicao pos)
+        {
+            Peca p = Tabuleiro.Peca(pos);
+            return p != null && p is Torre && p.Cor == Cor && p.QuantidadeDeMovimentos == 0;
         }
 
         public override bool[,] MovimentosPossiveis()
@@ -58,6 +68,34 @@ namespace Xadrez.Pecas
             pos.DefinirValores(Posicao.Linha - 1, Posicao.Coluna - 1);
             if (Tabuleiro.PosicaoValida(pos) && PodeMover(pos))
                 matrizDeMovimentos[pos.Linha, pos.Coluna] = true;
+
+            // #JogadaEspecial Roque
+            if (QuantidadeDeMovimentos == 0 && !Partida.EmXeque)
+            {
+                //Roque Pequeno
+                Posicao posicaoTorre1 = new Posicao(Posicao.Linha, Posicao.Coluna + 3);
+                if (TesteTorreParaRoque(posicaoTorre1))
+                {
+                    Posicao p1 = new Posicao(Posicao.Linha, Posicao.Coluna + 1);
+                    Posicao p2 = new Posicao(Posicao.Linha, Posicao.Coluna + 2);
+                    if (!Tabuleiro.ExistePeca(p1) && !Tabuleiro.ExistePeca(p2))
+                    {
+                        matrizDeMovimentos[Posicao.Linha, Posicao.Coluna + 2] = true;
+                    }
+                }
+                //Roque Grande
+                Posicao posicaoTorre2 = new Posicao(Posicao.Linha, Posicao.Coluna - 4);
+                if (TesteTorreParaRoque(posicaoTorre2))
+                {
+                    Posicao p1 = new Posicao(Posicao.Linha, Posicao.Coluna - 1);
+                    Posicao p2 = new Posicao(Posicao.Linha, Posicao.Coluna - 2);
+                    Posicao p3 = new Posicao(Posicao.Linha, Posicao.Coluna - 3);
+                    if (!Tabuleiro.ExistePeca(p1) && !Tabuleiro.ExistePeca(p2) && !Tabuleiro.ExistePeca(p3))
+                    {
+                        matrizDeMovimentos[Posicao.Linha, Posicao.Coluna - 2] = true;
+                    }
+                }
+            }
 
             return matrizDeMovimentos;
         }
